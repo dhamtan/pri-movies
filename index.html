@@ -1,133 +1,131 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>🎬 MovieHub - Guaranteed Working</title>
+    <title>🎬 MovieHub - API Working</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{background:#000;color:#fff;font-family:system-ui}
-        .header{position:fixed;top:0;left:0;right:0;background:rgba(0,0,0,0.95);padding:20px 0;z-index:100}
-        .container{max-width:1200px;margin:0 auto;padding:0 20px}
-        h1{font-size:2em;background:linear-gradient(45deg,#ff0080,#00f2ff);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;-webkit-text-stroke:1px transparent}
-        #search{padding:12px 20px;border:2px solid #00f2ff;border-radius:25px;background:rgba(0,242,255,0.1);color:#fff;width:350px;font-size:16px}
-        #search::placeholder{color:#aaa}
-        main{padding:120px 0 50px}
-        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;padding:20px}
-        .card{background:rgba(20,20,20,0.8);border-radius:15px;padding:20px;text-align:center;border:1px solid #333;transition:transform 0.3s}
-        .card:hover{transform:scale(1.05)}
-        .poster{width:100%;height:250px;background:linear-gradient(45deg,#ff0080,#00f2ff);border-radius:10px;margin-bottom:15px;display:flex;align-items:center;justify-content:center;font-size:24px}
+        body{margin:0;padding:80px 20px 20px;background:#000;color:#fff;font-family:Arial}
+        .header{position:fixed;top:0;left:0;right:0;background:rgba(0,0,0,0.9);padding:20px;z-index:100}
+        h1{font-size:2.5em;background:linear-gradient(45deg,#00ff88,#00bfff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        #search{padding:15px;border:2px solid #00ff88;border-radius:25px;background:rgba(0,255,136,0.1);color:#fff;width:400px;font-size:16px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:25px;margin-top:30px}
+        .card{background:#1a1a1a;padding:20px;border-radius:15px;border:1px solid #333;transition:0.3s;cursor:pointer}
+        .card:hover{transform:scale(1.05);border-color:#00ff88}
+        img{width:100%;height:280px;object-fit:cover;border-radius:10px;margin-bottom:15px}
         .title{font-weight:bold;font-size:1.1em;margin-bottom:10px}
-        .play{width:100%;padding:12px;background:linear-gradient(45deg,#ff0080,#00f2ff);border:none;border-radius:8px;color:#000;font-weight:bold;cursor:pointer;font-size:14px}
-        #player{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.98);z-index:1000;display:none;justify-content:center;align-items:center}
-        #player.show{display:flex}
-        .player-box{width:90%;max-width:900px;max-height:90vh;background:#111;border-radius:15px;position:relative}
-        .close{position:absolute;top:15px;right:25px;font-size:30px;color:#fff;cursor:pointer}
-        iframe{width:100%;height:450px;border:none;border-radius:10px}
-        .loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.5em;color:#00f2ff}
+        .rating{background:#00ff88;color:#000;padding:5px 12px;border-radius:15px;font-size:0.9em;display:inline-block}
+        .play{width:100%;padding:12px;background:#00ff88;color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+        #player{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.98);display:none;justify-content:center;align-items:center;z-index:999}
+        #player.active{display:flex}
+        .player{width:90%;max-width:1000px;max-height:90vh;background:#111;border-radius:20px;position:relative}
+        .close{position:absolute;top:20px;right:30px;font-size:40px;color:#fff;cursor:pointer}
+        iframe{width:100%;height:550px;border:none;border-radius:15px}
+        .loading{text-align:center;padding:100px;font-size:1.5em;color:#00ff88}
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="container flex justify-between items-center">
-            <h1>🎬 MovieHub</h1>
-            <input id="search" placeholder="🔍 Search trending movies..." oninput="searchMovies()">
-        </div>
+        <h1 style="display:inline-block;margin:0">🎬 MovieHub</h1>
+        <input id="search" placeholder="🔍 Search movies..." onkeyup="searchMovies(event)">
     </div>
     
-    <main>
-        <div class="container">
-            <div id="movies" class="grid">
-                <!-- Movies यहाँ load होंगी -->
-            </div>
-        </div>
-    </main>
+    <div id="movies" class="grid">
+        <div class="loading">Loading movies... 🎥</div>
+    </div>
     
     <div id="player">
-        <div class="player-box">
+        <div class="player">
             <span class="close" onclick="closePlayer()">×</span>
-            <iframe id="video"></iframe>
+            <iframe id="video" allowfullscreen></iframe>
         </div>
     </div>
 
     <script>
-        // 🔥 ZERO API KEYS - Pure client-side magic!
-        const TRENDING_MOVIES = [
-            {title:'Deadpool & Wolverine', year:'2024', rating:8.1},
-            {title:'Dune Part Two', year:'2024', rating:8.7},
-            {title:'Inside Out 2', year:'2024', rating:8.0},
-            {title:'Despicable Me 4', year:'2024', rating:7.2},
-            {title:'Twisters', year:'2024', rating:7.0},
-            {title:'Bad Boys Ride or Die', year:'2024', rating:6.7},
-            {title:'Kingdom of Planet Apes', year:'2024', rating:7.3},
-            {title:'Glen Powell Action', year:'2025', rating:7.8},
-            {title:'Ryan Reynolds Comedy', year:'2025', rating:7.5},
-            {title:'Zendaya Drama', year:'2025', rating:8.2},
-            {title:'Bollywood Blockbuster', year:'2025', rating:7.9},
-            {title:'Hindi Action Movie', year:'2025', rating:7.4}
-        ];
-
-        function loadMovies() {
+        // 🔥 WORKING PROXY + OLD API KEY
+        const PROXY = 'https://api.allorigins.win/get?url=';
+        const API_KEY = '174d0214bf933dd59b3d5ec68a0c967f';
+        const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+        
+        async function loadMovies() {
+            const moviesDiv = document.getElementById('movies');
+            moviesDiv.innerHTML = '<div class="loading">Trending movies लोड हो रही हैं...</div>';
+            
+            try {
+                // Proxy के through TMDB call
+                const tmdbUrl = https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY};
+                const proxyUrl = ${PROXY}${encodeURIComponent(tmdbUrl)};
+                
+                const response = await fetch(proxyUrl);
+                const data = await response.json();
+                const movies = JSON.parse(data.contents).results.slice(0, 16);
+                
+                showMovies(movies);
+            } catch(e) {
+                // Fallback static movies
+                showStaticMovies();
+            }
+        }
+        
+        function showMovies(movies) {
             const moviesDiv = document.getElementById('movies');
             moviesDiv.innerHTML = '';
+            
+            movies.forEach(movie => {
+                if(movie.poster_path && movie.title) {
+                    const card = document.createElement('div');
+                    card.className = 'card';
 
-Workkk, [22/02/2026 03:59]
-TRENDING_MOVIES.slice(0,12).forEach(movie => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = 
-                    <div class="poster">🎥 ${movie.title.slice(0,8)}</div>
-                    <div class="title">${movie.title}</div>
-                    <div style="color:#ff0080;font-weight:bold">⭐ ${movie.rating}</div>
-                    <button class="play" onclick="playMovie('${movie.title}')">
-                        ▶️ WATCH NOW
-                    </button>
-                ;
-                moviesDiv.appendChild(card);
+Workkk, [22/02/2026 04:11]
+card.innerHTML = 
+                        <img src="${IMG_URL}${movie.poster_path}" onerror="this.src='https://via.placeholder.com/220x300/333/fff?text=MOVIE'">
+                        <div class="title">${movie.title}</div>
+                        <div class="rating">⭐ ${movie.vote_average?.toFixed(1) || 'N/A'}</div>
+                        <button class="play" onclick="playMovie('${movie.title}')">▶️ WATCH</button>
+                    ;
+                    moviesDiv.appendChild(card);
+                }
             });
         }
-
-        function searchMovies() {
-            const term = document.getElementById('search').value.toLowerCase();
-            const moviesDiv = document.getElementById('movies');
+        
+        function showStaticMovies() {
+            const STATIC = [
+                {title:'Deadpool & Wolverine', poster:'/deadpool.jpg'},
+                {title:'Dune Part Two', poster:'/dune.jpg'},
+                {title:'Inside Out 2', poster:'/insideout.jpg'}
+            ];
+            showMovies(STATIC);
+        }
+        
+        async function searchMovies(e) {
+            if(e.keyCode !== 13) return;
+            const term = document.getElementById('search').value;
+            if(term.length < 2) return loadMovies();
             
-            if(term.length < 2) {
+            try {
+                const tmdbUrl = https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${term};
+                const proxyUrl = ${PROXY}${encodeURIComponent(tmdbUrl)};
+                
+                const response = await fetch(proxyUrl);
+                const data = await response.json();
+                const movies = JSON.parse(data.contents).results;
+                showMovies(movies);
+            } catch(e) {
                 loadMovies();
-                return;
             }
-            
-            const filtered = TRENDING_MOVIES.filter(m => 
-                m.title.toLowerCase().includes(term)
-            );
-            
-            moviesDiv.innerHTML = filtered.length ? 
-                filtered.map(movie => 
-                    <div class="card">
-                        <div class="poster">🎥 ${movie.title.slice(0,8)}</div>
-                        <div class="title">${movie.title}</div>
-                        <div style="color:#ff0080;font-weight:bold">⭐ ${movie.rating}</div>
-                        <button class="play" onclick="playMovie('${movie.title}')">▶️ PLAY</button>
-                    </div>
-                ).join('') : 
-                '<div class="card" style="grid-column:1/-1;text-align:center;padding:60px"><h2>कोई movie नहीं मिली 😅</h2><button class="play" onclick="loadMovies()" style="width:200px;margin-top:20px">Trending देखें</button></div>';
         }
-
+        
         function playMovie(title) {
-            document.getElementById('player').classList.add('show');
+            document.getElementById('player').classList.add('active');
             document.getElementById('video').src = 
-                https://www.dailymotion.com/embed/search?query=${encodeURIComponent(title+' full movie hindi dubbed 2024 1080p')};
+                https://www.dailymotion.com/embed/search?query=${encodeURIComponent(title+' full movie hindi 1080p')};
         }
-
+        
         function closePlayer() {
-            document.getElementById('player').classList.remove('show');
+            document.getElementById('player').classList.remove('active');
             document.getElementById('video').src = '';
         }
-
-        // Load on start
-        loadMovies();
         
-        // Enter key search
-        document.getElementById('search').addEventListener('keypress', e => {
-            if(e.key === 'Enter') searchMovies();
-        });
+        // Start
+        loadMovies();
     </script>
 </body>
 </html>
