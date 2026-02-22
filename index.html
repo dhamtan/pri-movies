@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="dynamicTitle">Pri Movies - Premium Index</title>
+    <meta name="monetag" content="582141df11779523445ef8c6a9577dc4">
+    
+    <title>Pri Movies - Premium Index</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * { -webkit-tap-highlight-color: transparent; }
         body { background-color: #000; color: white; font-family: sans-serif; overflow-x: hidden; margin: 0; }
         .p-card { border: 1px solid #1f2937; cursor: pointer; border-radius: 1rem; overflow: hidden; background: #0b0f15; position: relative; transition: 0.1s; }
-        .p-card:active { transform: scale(0.95); }
         .star-rating { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.85); color: #fbbf24; padding: 2px 6px; border-radius: 6px; font-size: 10px; font-weight: 900; border: 1px solid #fbbf24; }
         .sidebar { position: fixed; left: -300px; top: 0; width: 280px; height: 100%; background: #0b0f15; z-index: 200; transition: 0.2s; border-right: 1px solid #1f2937; padding: 20px; overflow-y: auto; }
         .sidebar.active { left: 0; }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 150; display: none; backdrop-filter: blur(2px); }
         .overlay.active { display: block; }
-        .ad-space { width: 100%; text-align: center; margin: 15px 0; background: #0a0a0a; border: 1px dashed #333; color: #444; font-size: 10px; padding: 10px; border-radius: 10px; }
+        .ad-space { width: 100%; text-align: center; margin: 15px 0; background: #0a0a0a; border: 1px dashed #333; color: #444; font-size: 10px; padding: 10px; border-radius: 10px; min-height: 50px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -30,26 +31,23 @@
         <ul class="space-y-4 font-bold uppercase text-[10px] tracking-widest text-gray-300">
             <li class="hover:text-white cursor-pointer" onclick="setMode('movie')">🎬 Movies</li>
             <li class="hover:text-white cursor-pointer" onclick="setMode('tv')">📺 Webseries</li>
-            
             <li class="pt-4 border-t border-gray-800 text-yellow-500">Legal Info</li>
-            <li onclick="alert('ABOUT US: Pri Movies is the fastest indexing engine for movie lovers.')">ℹ️ About Us</li>
-            <li onclick="alert('TERMS: We are a search engine and do not host any files.')">📄 Terms & Conditions</li>
-            <li onclick="alert('FAIR USE: This site is for educational indexing purposes.')">⚖️ Fair Use</li>
-            <li onclick="alert('DISCLAIMER: We do not upload or store any media on our servers.')" class="text-red-400">⚠️ Disclaimer</li>
-            
-            <li class="pt-6 text-blue-400 italic">📩 help.primovies@gmail.com</li>
+            <li onclick="alert('ABOUT: Pri Movies Indexing')">ℹ️ About Us</li>
+            <li onclick="alert('TERMS: Metadata Engine')">📄 Terms</li>
+            <li onclick="alert('DISCLAIMER: No files on server')" class="text-red-400">⚠️ Disclaimer</li>
+            <li class="pt-6 text-blue-400">📩 help.primovies@gmail.com</li>
         </ul>
     </div>
 
     <header class="bg-black sticky top-0 z-50 p-4 border-b border-gray-900 flex justify-between items-center">
         <div class="flex items-center gap-4">
             <button onclick="toggleMenu()" class="text-yellow-500 text-3xl">☰</button>
-            <h1 class="text-2xl font-black text-yellow-500 tracking-tighter" onclick="location.reload()">Pri Movies</h1>
+            <h1 class="text-2xl font-black text-yellow-500 tracking-tighter">Pri Movies</h1>
         </div>
-        <div class="text-[9px] font-black text-green-500 border border-green-500/30 px-3 py-1 rounded-full uppercase italic">LIVE: 4,350</div>
     </header>
 
-    <div class="ad-space">-- PASTE ADSTERRA CODE HERE --</div>
+    <div class="ad-space" id="header-ad">
+        </div>
 
     <nav class="bg-black p-4 flex gap-3 overflow-x-auto border-b border-gray-900 no-scrollbar">
         <button onclick="setLang('hi-IN')" class="whitespace-nowrap px-6 py-2 border border-yellow-500 text-yellow-500 rounded-full font-black text-[9px]">HINDI</button>
@@ -61,7 +59,7 @@
     </nav>
 
     <section class="max-w-4xl mx-auto px-6 mt-6">
-        <input id="searchInput" type="text" placeholder="Search in Pri Movies..." class="w-full bg-gray-900 border-2 border-gray-800 rounded-2xl px-6 py-4 focus:border-yellow-500 outline-none text-white">
+        <input id="searchInput" type="text" placeholder="Search Pri Movies..." class="w-full bg-gray-900 border-2 border-gray-800 rounded-2xl px-6 py-4 focus:border-yellow-500 outline-none text-white">
     </section>
 
     <main class="max-w-7xl mx-auto p-4">
@@ -74,13 +72,17 @@
 
     <div id="playerBox" class="fixed inset-0 bg-black z-[300] hidden flex flex-col items-center justify-center p-4">
         <div class="w-full max-w-5xl text-center">
-            <div class="flex justify-between items-center mb-4 px-2">
-                <h3 id="playTitle" class="text-sm font-black text-yellow-500 uppercase truncate"></h3>
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="playTitle" class="text-sm font-black text-yellow-500 uppercase"></h3>
                 <button onclick="closePlayer()" class="bg-red-600 px-5 py-2 rounded-full font-black text-[10px]">CLOSE ×</button>
             </div>
-            <div class="aspect-video rounded-2xl overflow-hidden border border-gray-900 shadow-2xl">
+            <div class="aspect-video rounded-2xl overflow-hidden border border-gray-900">
                 <iframe id="videoFrame" class="w-full h-full" allowfullscreen></iframe>
             </div>
+            
+            <div class="ad-space" id="player-ad">
+                </div>
+
             <div class="mt-4 flex flex-wrap justify-center gap-2">
                 <button onclick="watchTrailer()" class="px-6 py-3 bg-white text-black rounded-xl font-black text-[10px]">TRAILER</button>
                 <button onclick="changeServer(1)" class="px-6 py-3 bg-yellow-500 text-black rounded-xl font-black text-[10px]">SERVER 1</button>
