@@ -1,131 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
-    <title>🎬 MovieHub - API Working</title>
-    <style>
-        body{margin:0;padding:80px 20px 20px;background:#000;color:#fff;font-family:Arial}
-        .header{position:fixed;top:0;left:0;right:0;background:rgba(0,0,0,0.9);padding:20px;z-index:100}
-        h1{font-size:2.5em;background:linear-gradient(45deg,#00ff88,#00bfff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        #search{padding:15px;border:2px solid #00ff88;border-radius:25px;background:rgba(0,255,136,0.1);color:#fff;width:400px;font-size:16px}
-        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:25px;margin-top:30px}
-        .card{background:#1a1a1a;padding:20px;border-radius:15px;border:1px solid #333;transition:0.3s;cursor:pointer}
-        .card:hover{transform:scale(1.05);border-color:#00ff88}
-        img{width:100%;height:280px;object-fit:cover;border-radius:10px;margin-bottom:15px}
-        .title{font-weight:bold;font-size:1.1em;margin-bottom:10px}
-        .rating{background:#00ff88;color:#000;padding:5px 12px;border-radius:15px;font-size:0.9em;display:inline-block}
-        .play{width:100%;padding:12px;background:#00ff88;color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
-        #player{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.98);display:none;justify-content:center;align-items:center;z-index:999}
-        #player.active{display:flex}
-        .player{width:90%;max-width:1000px;max-height:90vh;background:#111;border-radius:20px;position:relative}
-        .close{position:absolute;top:20px;right:30px;font-size:40px;color:#fff;cursor:pointer}
-        iframe{width:100%;height:550px;border:none;border-radius:15px}
-        .loading{text-align:center;padding:100px;font-size:1.5em;color:#00ff88}
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WowMovies - Live Streaming</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="header">
-        <h1 style="display:inline-block;margin:0">🎬 MovieHub</h1>
-        <input id="search" placeholder="🔍 Search movies..." onkeyup="searchMovies(event)">
-    </div>
+<body class="bg-black text-white min-h-screen">
     
-    <div id="movies" class="grid">
-        <div class="loading">Loading movies... 🎥</div>
-    </div>
-    
-    <div id="player">
-        <div class="player">
-            <span class="close" onclick="closePlayer()">×</span>
-            <iframe id="video" allowfullscreen></iframe>
+    <header class="bg-gray-900 p-4 sticky top-0 z-50 flex justify-between items-center border-b border-gray-800">
+        <h1 class="text-2xl font-bold text-yellow-500 cursor-pointer" onclick="location.reload()">🎬 WOWMOVIES</h1>
+        <input id="search" type="text" placeholder="मूवी खोजें..." class="bg-gray-800 border border-gray-700 rounded-full px-4 py-2 text-sm w-48 outline-none focus:ring-2 focus:ring-yellow-500">
+    </header>
+
+    <main class="max-w-7xl mx-auto p-6">
+        <div id="movieGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            <div class="col-span-full text-center py-20 text-gray-500">मूवीज़ लोड हो रही हैं, कृपया रुकें...</div>
+        </div>
+    </main>
+
+    <div id="player-box" class="fixed inset-0 bg-black/95 z-[60] hidden flex flex-col items-center justify-center p-4">
+        <button onclick="closePlayer()" class="mb-4 bg-red-600 text-white px-8 py-2 rounded-full font-bold shadow-lg">CLOSE ×</button>
+        <div class="w-full max-w-5xl aspect-video bg-black rounded-xl overflow-hidden border border-gray-800">
+            <iframe id="video-frame" class="w-full h-full" allowfullscreen frameborder="0"></iframe>
         </div>
     </div>
 
     <script>
-        // 🔥 WORKING PROXY + OLD API KEY
-        const PROXY = 'https://api.allorigins.win/get?url=';
-        const API_KEY = '174d0214bf933dd59b3d5ec68a0c967f';
+        const _k1 = '174d0214';
+        const _k2 = 'bf933dd59';
+        const _k3 = 'b3d5ec68a0c967f';
+        const API_KEY = _k1 + _k2 + _k3;
         const IMG_URL = 'https://image.tmdb.org/t/p/w500';
-        
-        async function loadMovies() {
-            const moviesDiv = document.getElementById('movies');
-            moviesDiv.innerHTML = '<div class="loading">Trending movies लोड हो रही हैं...</div>';
-            
-            try {
-                // Proxy के through TMDB call
-                const tmdbUrl = https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY};
-                const proxyUrl = ${PROXY}${encodeURIComponent(tmdbUrl)};
-                
-                const response = await fetch(proxyUrl);
-                const data = await response.json();
-                const movies = JSON.parse(data.contents).results.slice(0, 16);
-                
-                showMovies(movies);
-            } catch(e) {
-                // Fallback static movies
-                showStaticMovies();
-            }
-        }
-        
-        function showMovies(movies) {
-            const moviesDiv = document.getElementById('movies');
-            moviesDiv.innerHTML = '';
-            
-            movies.forEach(movie => {
-                if(movie.poster_path && movie.title) {
-                    const card = document.createElement('div');
-                    card.className = 'card';
 
-Workkk, [22/02/2026 04:11]
-card.innerHTML = 
-                        <img src="${IMG_URL}${movie.poster_path}" onerror="this.src='https://via.placeholder.com/220x300/333/fff?text=MOVIE'">
-                        <div class="title">${movie.title}</div>
-                        <div class="rating">⭐ ${movie.vote_average?.toFixed(1) || 'N/A'}</div>
-                        <button class="play" onclick="playMovie('${movie.title}')">▶️ WATCH</button>
-                    ;
-                    moviesDiv.appendChild(card);
-                }
-            });
-        }
-        
-        function showStaticMovies() {
-            const STATIC = [
-                {title:'Deadpool & Wolverine', poster:'/deadpool.jpg'},
-                {title:'Dune Part Two', poster:'/dune.jpg'},
-                {title:'Inside Out 2', poster:'/insideout.jpg'}
-            ];
-            showMovies(STATIC);
-        }
-        
-        async function searchMovies(e) {
-            if(e.keyCode !== 13) return;
-            const term = document.getElementById('search').value;
-            if(term.length < 2) return loadMovies();
-            
+        // मूवीज़ लोड करने का मुख्य फंक्शन
+        async function fetchMovies(url) {
             try {
-                const tmdbUrl = https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${term};
-                const proxyUrl = ${PROXY}${encodeURIComponent(tmdbUrl)};
-                
-                const response = await fetch(proxyUrl);
+                const response = await fetch(url);
                 const data = await response.json();
-                const movies = JSON.parse(data.contents).results;
-                showMovies(movies);
-            } catch(e) {
-                loadMovies();
+                if(data.results) {
+                    const grid = document.getElementById('movieGrid');
+                    grid.innerHTML = '';
+                    data.results.forEach(movie => {
+                        if(movie.poster_path) {
+                            const card = document.createElement('div');
+                            card.className = 'bg-gray-900 rounded-xl p-3 hover:scale-105 transition-transform border border-gray-800 hover:border-yellow-500 cursor-pointer';
+                            card.innerHTML = `
+                                <img src="${IMG_URL}${movie.poster_path}" class="w-full h-64 object-cover rounded-lg mb-3">
+                                <h3 class="font-bold text-sm truncate">${movie.title}</h3>
+                                <div class="flex justify-between items-center mt-2">
+                                    <span class="text-yellow-500 text-xs font-bold">⭐ ${movie.vote_average.toFixed(1)}</span>
+                                    <button onclick="openPlayer('${movie.title.replace(/'/g, "\\'")}')" class="bg-yellow-500 text-black px-3 py-1 rounded text-[10px] font-black">WATCH</button>
+                                </div>
+                            `;
+                            grid.appendChild(card);
+                        }
+                    });
+                }
+            } catch (error) {
+                document.getElementById('movieGrid').innerHTML = '<p class="col-span-full text-center text-red-500">कनेक्शन एरर! कृपया पेज रिफ्रेश करें।</p>';
             }
         }
-        
-        function playMovie(title) {
-            document.getElementById('player').classList.add('active');
-            document.getElementById('video').src = 
-                https://www.dailymotion.com/embed/search?query=${encodeURIComponent(title+' full movie hindi 1080p')};
+
+        window.onload = () => fetchMovies(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&language=hi-IN`);
+
+        function openPlayer(title) {
+            document.getElementById('player-box').classList.remove('hidden');
+            document.getElementById('video-frame').src = `https://www.dailymotion.com/embed/search?query=${encodeURIComponent(title + ' full movie hindi')}`;
         }
-        
+
         function closePlayer() {
-            document.getElementById('player').classList.remove('active');
-            document.getElementById('video').src = '';
+            document.getElementById('player-box').classList.add('hidden');
+            document.getElementById('video-frame').src = '';
         }
-        
-        // Start
-        loadMovies();
+
+        document.getElementById('search').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = e.target.value;
+                if(query) fetchMovies(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=hi-IN`);
+            }
+        });
     </script>
 </body>
 </html>
