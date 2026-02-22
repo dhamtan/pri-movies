@@ -1,3 +1,4 @@
+Workkk, [22/02/2026 19:10]
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -5,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pri Movies - Universe Portal</title>
     
-    <meta name="monetag" content="582141df90453303893325785f76274b">
+    <meta name="popads-verification-3635813" value="dd5b680a50f2cb1654f979a955c69855" />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -55,7 +56,9 @@
         <div class="w-full max-w-5xl">
             <div class="flex justify-between items-center mb-4">
                 <h3 id="playTitle" class="text-xl font-black text-yellow-500 uppercase truncate"></h3>
-                <button onclick="closePlayer()" class="bg-red-600 text-white px-8 py-2 rounded-full font-bold text-xs shadow-xl">CLOSE ×</button>
+
+Workkk, [22/02/2026 19:10]
+<button onclick="closePlayer()" class="bg-red-600 text-white px-8 py-2 rounded-full font-bold text-xs shadow-xl">CLOSE ×</button>
             </div>
             <div class="aspect-video rounded-[2.5rem] overflow-hidden ai-glow bg-black">
                 <iframe id="videoFrame" class="w-full h-full" allowfullscreen allow="autoplay"></iframe>
@@ -83,8 +86,8 @@
 
         async function fetchMovies(p = 1, q = '', append = false) {
             let url = q 
-                ? `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(q)}&language=${currentLang}&page=${p}`
-                : `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=${currentLang.split('-')[0]}&page=${p}&language=${currentLang}&sort_by=popularity.desc`;
+                ? https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(q)}&language=${currentLang}&page=${p}
+                : https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=${currentLang.split('-')[0]}&page=${p}&language=${currentLang}&sort_by=popularity.desc;
             
             const res = await fetch(url);
             const data = await res.json();
@@ -99,11 +102,11 @@
                     div.onclick = () => {
                         document.getElementById('playerBox').classList.remove('hidden');
                         document.getElementById('playTitle').innerText = m.title;
-                        document.getElementById('videoFrame').src = `https://vidsrc.me/embed/movie?tmdb=${m.id}`;
+                        document.getElementById('videoFrame').src = https://vidsrc.me/embed/movie?tmdb=${m.id};
                     };
-                    div.innerHTML = `
+                    div.innerHTML = 
                         <img src="https://image.tmdb.org/t/p/w500${m.poster_path}" class="w-full h-64 md:h-72 object-cover rounded-[1.5rem] mb-3">
-                        <div class="text-center"><h4 class="text-[10px] font-black truncate">${m.title}</h4></div>`;
+                        <div class="text-center"><h4 class="text-[10px] font-black truncate">${m.title}</h4></div>;
                     grid.appendChild(div);
                 }
             });
@@ -113,7 +116,7 @@
         function searchMovies() { const q = document.getElementById('searchInput').value; if(q) { page = 1; fetchMovies(1, q); } }
         function nextPage() { page++; fetchMovies(page, document.getElementById('searchInput').value, true); }
         function closePlayer() { document.getElementById('playerBox').classList.add('hidden'); document.getElementById('videoFrame').src = ''; }
-        function aiRecommend() { alert(`AI Pick: हमने आपके लिए "${movies[0].title}" चुनी है!`); }
+        function aiRecommend() { alert(AI Pick: हमने आपके लिए "${movies[0].title}" चुनी है!); }
         
         document.getElementById('searchInput').onkeypress = (e) => { if(e.key === 'Enter') searchMovies(); };
         window.onload = () => fetchMovies();
