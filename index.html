@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
+    <link rel="preconnect" href="https://image.tmdb.org">
+    <link rel="preconnect" href="https://api.themoviedb.org">
+    <link rel="dns-prefetch" href="https://api.themoviedb.org">
+    
     <meta name="google-site-verification" content="r4qiBWvH6r8g4r5B7QDJDwdewlm9aCNhUoaNleV1soA" />
 
     <title>PRI-MOVIES - Watch Latest HD Movies & Web Series Free Online</title>
@@ -22,40 +26,71 @@
     <meta property="og:image" content="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d53d28331f51ed07d6cd1aa3a1bd7e35.svg">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <script async data-cfasync="false" src="https://pl28735283.effectivegatecpm.com/745c1ef3a6af871203febf2e53f94208/invoke.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script async src="https://pl28735283.effectivegatecpm.com/745c1ef3a6af871203febf2e53f94208/invoke.js"></script>
 
     <style>
-        :root { --main-orange: #ff4f00; --bg-dark: #0b0d12; --card-bg: #1a1d24; }
-        body { background-color: var(--bg-dark); color: white; font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 80px; overflow-x: hidden; }
+        :root { --main-orange: #ff4f00; --bg-dark: #08090a; --card-bg: #121418; }
+        body { background-color: var(--bg-dark); color: white; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding-bottom: 80px; overflow-x: hidden; scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
         
-        .site-header { background: #000; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 19px; font-weight: 900; color: var(--main-orange); font-style: italic; text-transform: uppercase; cursor: pointer; }
+        * { transition: all 0.1s ease-in-out; }
+
+        /* App-Like Header */
+        .site-header { background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 22px; font-weight: 900; color: var(--main-orange); font-style: italic; text-transform: uppercase; cursor: pointer; letter-spacing: -1px; }
         
-        #hero-slider { position: relative; width: 100%; height: 32vh; background: #000; overflow: hidden; }
+        /* Full Width Slider like Apps */
+        #hero-slider { position: relative; width: 100%; height: 40vh; background: #000; overflow: hidden; box-shadow: inset 0 -50px 50px var(--bg-dark); }
         .poster-3d { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s ease; z-index: 1; }
         .poster-active { opacity: 1; z-index: 10; }
+        .poster-3d::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(to top, var(--bg-dark), transparent); }
 
-        .movie-grid { display: grid; grid-template-cols: repeat(2, 1fr); gap: 10px; padding: 10px; }
-        @media (min-width: 768px) { .movie-grid { grid-template-cols: repeat(5, 1fr); gap: 15px; padding: 15px 70px; } }
+        /* Grid Optimization for Mobile (Netflix Style) */
+        .movie-grid { display: grid; grid-template-cols: repeat(3, 1fr); gap: 8px; padding: 10px; }
+        @media (min-width: 768px) { .movie-grid { grid-template-cols: repeat(6, 1fr); gap: 15px; padding: 20px 60px; } }
 
-        .movie-card { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 2/3; background: var(--card-bg); cursor: pointer; border: 1.5px solid #1a1a1a; }
-        .movie-card img { width: 100%; height: 100%; object-fit: cover; }
-        .movie-card .card-info { position: absolute; bottom: 0; width: 100%; padding: 10px 8px 6px; background: linear-gradient(transparent, rgba(0,0,0,0.95)); }
-        .movie-title { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .movie-card { position: relative; border-radius: 8px; overflow: hidden; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .movie-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; cursor: pointer; }
+        .movie-card:active { transform: scale(0.96); }
         
-        .rating-badge { position: absolute; top: 6px; right: 6px; background: #f5c518; color: #000; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 800; z-index: 20; }
+        .rating-badge { position: absolute; top: 6px; left: 6px; background: rgba(245, 197, 24, 0.9); color: #000; padding: 1px 5px; border-radius: 4px; font-size: 9px; font-weight: 900; z-index: 20; }
 
-        .filter-container { display: flex; overflow-x: auto; gap: 8px; padding: 10px 10px; background: #0b0d12; border-bottom: 1px solid #1a1a1a; }
-        .filter-btn { background: #1a1d24; color: #aaa; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; white-space: nowrap; text-transform: uppercase; border: 1px solid #2a2a2a; }
-        .filter-btn.active { background: var(--main-orange); color: white; }
+        /* Share Container Fix */
+        .share-container { display: flex; justify-content: space-around; padding: 5px; background: #000; gap: 4px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .btn-share-3d { flex: 1; font-size: 10px; color: white; padding: 5px 0; border-radius: 4px; text-align: center; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0.8; }
+        .btn-wa { background: #25d366; }
+        .btn-tg { background: #0088cc; }
+        .btn-link { background: #333; }
+        .btn-share-3d i { font-size: 12px; }
 
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(8px); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #1a1a1a; z-index: 1000; }
-        .nav-item { color: #666; text-align: center; font-size: 10px; font-weight: bold; flex: 1; cursor: pointer; }
-        .nav-item.active { color: var(--main-orange); }
+        .movie-card .card-info { padding: 6px; background: var(--card-bg); }
+        .movie-title { font-size: 10px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.9; }
+
+        /* App-Style Pill Filters */
+        .filter-container { display: flex; overflow-x: auto; gap: 8px; padding: 12px 10px; background: var(--bg-dark); }
+        .filter-btn { background: #1a1d24; color: #eee; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; border: 1px solid rgba(255,255,255,0.1); }
+        .filter-btn.active { background: var(--main-orange); border-color: var(--main-orange); color: white; }
+
+        /* Modern Bottom Nav (App Interface) */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(13, 15, 19, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.05); z-index: 2000; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
+        .nav-item { color: #777; text-align: center; font-size: 10px; font-weight: 700; flex: 1; cursor: pointer; transition: 0.2s; }
+        .nav-item.active { color: var(--main-orange); transform: translateY(-2px); }
+        .nav-item i { font-size: 18px; margin-bottom: 2px; }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        #mainIframe { width: 100%; height: 100%; border: none; }
+        #mainIframe { width: 100%; height: 100%; border: none; background: #000; }
+        
+        .server-footer { font-size: 10px; color: var(--main-orange); text-align: center; padding: 12px; border-top: 1px solid #1a1a1a; margin-top: 5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* App-Style Buttons */
+        .btn-footer-3d { background: #d32f2f; color: white; padding: 10px 20px; border-radius: 6px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        
+        #disclaimer-box { background: #121418; padding: 20px; border-radius: 12px; margin: 15px; font-size: 11px; color: #888; text-align: justify; border: 1px solid rgba(255,255,255,0.05); }
+
+        /* Player App Feeling */
+        #playerOverlay { background: #000; }
+        #serverList button { background: #1a1d24; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 18px; color: #fff; font-size: 11px; font-weight: bold; }
+        #serverList button:active { background: var(--main-orange); }
     </style>
 </head>
 <body>
@@ -63,8 +98,8 @@
 <div class="site-header">
     <div class="logo" onclick="location.reload()">PRI-MOVIES</div>
     <div class="flex items-center gap-2">
-        <input type="text" id="searchInput" onkeyup="if(event.keyCode===13)triggerSearch()" placeholder="Search..." class="bg-[#1a1d24] text-xs px-3 py-1.5 rounded-lg border border-white/5 outline-none w-28 focus:w-40 transition-all">
-        <button onclick="triggerSearch()" class="bg-[#ff4f00] text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase">Search</button>
+        <input type="text" id="searchInput" onkeyup="if(event.keyCode===13)triggerSearch()" placeholder="Search..." class="bg-[#1a1d24] text-xs px-4 py-2 rounded-full border border-white/10 outline-none w-32 focus:w-44 transition-all text-white">
+        <button onclick="triggerSearch()" class="bg-[#ff4f00] text-[10px] font-bold px-3 py-2 rounded-full uppercase">🔍</button>
     </div>
 </div>
 
@@ -73,43 +108,58 @@
 <div id="hero-slider"><div id="slider-content"></div></div>
 
 <div class="filter-container no-scrollbar">
+    <button onclick="filterBy('movie', this)" class="filter-btn active">🎬 Movies</button>
+    <button onclick="filterBy('tv', this)" class="filter-btn">📺 Webseries</button>
     <button onclick="filterBy('hi', this)" class="filter-btn">🇮🇳 Hindi</button>
     <button onclick="filterBy('en', this)" class="filter-btn">🇺🇸 English</button>
     <button onclick="filterBy('pa', this)" class="filter-btn">Pa</button>
     <button onclick="filterBy('te', this)" class="filter-btn">South</button>
-    <button onclick="filterBy('movie', this)" class="filter-btn active">🎬 Movies</button>
-    <button onclick="filterBy('tv', this)" class="filter-btn">📺 Webseries</button>
 </div>
 
 <div id="popularGrid" class="movie-grid"></div>
 
 <div id="loading" class="text-center p-8 text-gray-500 font-bold text-[10px] uppercase">Loading...</div>
 
+<div id="disclaimer-box">
+    <h3 class="text-white font-bold mb-2 uppercase">Legal Disclaimer</h3>
+    1. PRI-MOVIES does not host any media files.<br>
+    2. All content is indexed from third-party websites.<br>
+    3. We only act as a directory for public content.
+</div>
+
 <footer class="p-8 text-center bg-black/40 border-t border-white/5">
-    <div class="flex justify-center gap-4 mb-4">
+    <div class="flex flex-wrap justify-center gap-4 mb-4">
         <button class="bg-[#e91e63] px-4 py-2 rounded text-[10px] font-bold" onclick="alert('Educational Purpose Only')">Disclaimer</button>
-        <button class="bg-[#4caf50] px-4 py-2 rounded text-[10px] font-bold" onclick="alert('Contact: help@pri-movies.pages.dev')">Contact</button>
+        <button class="bg-[#4caf50] px-4 py-2 rounded text-[10px] font-bold" onclick="alert('Contact: HELP.WOWMOVIES@GMAIL.COM')">Contact</button>
+        <button class="btn-footer-3d" onclick="showDMCA()">DMCA / Removal</button>
     </div>
     <p class="text-[10px] text-gray-600 font-bold uppercase">© 2026 pri-movies.pages.dev</p>
 </footer>
 
 <div class="bottom-nav">
-    <div class="nav-item active" onclick="location.reload()">🏠<br>HOME</div>
-    <div class="nav-item" onclick="filterBy('movie', this)">🎬<br>MOVIES</div>
-    <div class="nav-item" onclick="filterBy('tv', this)">📺<br>SERIES</div>
-    <div class="nav-item" onclick="document.getElementById('searchInput').focus()">🔍<br>SEARCH</div>
+    <div class="nav-item active" onclick="location.reload()"><i class="fa-solid fa-house"></i><br>HOME</div>
+    <div class="nav-item" onclick="filterBy('movie', this)"><i class="fa-solid fa-clapperboard"></i><br>MOVIES</div>
+    <div class="nav-item" onclick="filterBy('tv', this)"><i class="fa-solid fa-tv"></i><br>SERIES</div>
+    <div class="nav-item" onclick="document.getElementById('searchInput').focus()"><i class="fa-solid fa-magnifying-glass"></i><br>SEARCH</div>
 </div>
 
 <div id="playerOverlay" class="fixed inset-0 bg-black z-[10000] hidden flex flex-col">
     <div class="p-4 flex justify-between items-center bg-black border-b border-white/10">
         <h2 id="playingTitle" class="text-[10px] font-bold text-[#ff4f00] truncate max-w-[70%] uppercase">PLAYING</h2>
-        <button onclick="closePlayer()" class="text-xl font-bold bg-white/10 w-8 h-8 rounded-full">✕</button>
+        <div class="flex gap-4">
+            <button onclick="skipTime(-10)" class="text-xs bg-white/5 px-2 rounded">-10s</button>
+            <button onclick="skipTime(10)" class="text-xs bg-white/5 px-2 rounded">+10s</button>
+            <button onclick="closePlayer()" class="text-xl font-bold bg-white/10 w-8 h-8 rounded-full">✕</button>
+        </div>
     </div>
-    <div class="flex-1 bg-black flex items-center justify-center">
-        <iframe id="mainIframe" allowfullscreen referrerpolicy="no-referrer"></iframe>
+    <div class="flex-1 bg-black flex items-center justify-center relative">
+        <iframe id="mainIframe" allowfullscreen playsinline webkit-playsinline allow="autoplay; fullscreen; encrypted-media; picture-in-picture" referrerpolicy="no-referrer"></iframe>
     </div>
     <div class="p-3 bg-[#0b0d12]">
-        <div class="flex gap-2 overflow-x-auto no-scrollbar" id="serverList"></div>
+        <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2" id="serverList"></div>
+        <div class="server-footer">
+            "IF CURRENT SERVER DOES NOT WORK, PLEASE TRY OTHER AVAILABLE SERVERS BELOW"
+        </div>
     </div>
 </div>
 
@@ -129,8 +179,8 @@
         const heroData = await fetchData('/trending/movie/day');
         document.getElementById('slider-content').innerHTML = heroData.results.slice(0, 5).map((m, i) => `
             <div class="poster-3d ${i === 0 ? 'poster-active' : ''}" onclick="playNow('${m.id}','movie', '${m.title.replace(/'/g, "")}')">
-                <img src="https://image.tmdb.org/t/p/original${m.backdrop_path}" class="w-full h-full object-cover brightness-50">
-                <div class="absolute bottom-6 left-4"><h2 class="text-lg font-black uppercase">${m.title}</h2><div class="mt-2 bg-[#ff4f00] inline-block px-3 py-1 rounded text-[9px] font-bold">WATCH NOW</div></div>
+                <img src="https://image.tmdb.org/t/p/original${m.backdrop_path}" alt="${m.title}" class="w-full h-full object-cover brightness-75">
+                <div class="absolute bottom-10 left-4 z-20"><h2 class="text-xl font-black uppercase text-white shadow-lg">${m.title}</h2><div class="mt-2 bg-[#ff4f00] inline-block px-4 py-1.5 rounded-full text-[10px] font-bold">▶ WATCH NOW</div></div>
             </div>
         `).join('');
         
@@ -147,6 +197,14 @@
         window.onscroll = () => { if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 800) loadMore(); };
     }
 
+    function shareMovie(platform, id, title) {
+        const url = encodeURIComponent(window.location.origin + '?id=' + id);
+        const text = encodeURIComponent("Watch " + title + " for Free on PRI-MOVIES!");
+        if(platform === 'wa') window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`);
+        if(platform === 'tg') window.open(`https://t.me/share/url?url=${url}&text=${text}`);
+        if(platform === 'copy') { navigator.clipboard.writeText(window.location.origin + '?id=' + id); alert('Movie Link Copied!'); }
+    }
+
     async function loadMore() {
         if(isFetching) return; isFetching = true;
         let endpoint = currentLang ? `/discover/movie?with_original_language=${currentLang}&page=${currentPage}` : `/${currentType}/popular?page=${currentPage}`;
@@ -154,12 +212,18 @@
             const data = await fetchData(endpoint);
             data.results.forEach(m => {
                 if(!m.poster_path) return;
+                const title = (m.title || m.name).replace(/'/g, "");
                 const card = document.createElement('div');
                 card.className = 'movie-card';
                 card.innerHTML = `
                     <div class="rating-badge">${m.vote_average.toFixed(1)}</div>
-                    <img src="https://image.tmdb.org/t/p/w500${m.poster_path}" loading="lazy" onclick="playNow('${m.id}','${currentType}', '${(m.title || m.name).replace(/'/g, "")}')">
-                    <div class="card-info"><div class="movie-title">${m.title || m.name}</div></div>
+                    <img src="https://image.tmdb.org/t/p/w500${m.poster_path}" alt="${title}" loading="lazy" onclick="playNow('${m.id}','${currentType}', '${title}')">
+                    <div class="share-container">
+                        <button class="btn-share-3d btn-wa" onclick="shareMovie('wa','${m.id}','${title}')"><i class="fab fa-whatsapp"></i></button>
+                        <button class="btn-share-3d btn-tg" onclick="shareMovie('tg','${m.id}','${title}')"><i class="fab fa-telegram"></i></button>
+                        <button class="btn-share-3d btn-link" onclick="shareMovie('copy','${m.id}','${title}')"><i class="fa-solid fa-link"></i></button>
+                    </div>
+                    <div class="card-info" onclick="playNow('${m.id}','${currentType}', '${title}')"><div class="movie-title">${title}</div></div>
                 `;
                 document.getElementById('popularGrid').appendChild(card);
             });
@@ -168,17 +232,42 @@
         isFetching = false;
     }
 
+    function changeServer(url) {
+        const frame = document.getElementById('mainIframe');
+        frame.src = 'about:blank';
+        setTimeout(() => { frame.src = url; }, 50);
+    }
+
     function playNow(id, type, title) {
         const t = (type === 'tv') ? 'tv' : 'movie';
         document.getElementById('playerOverlay').style.display = 'flex';
         document.getElementById('playingTitle').innerText = title;
+        
         const servers = [
-            { n: "S-1 FAST", u: `https://vidsrc.to/embed/${t}/${id}` },
-            { n: "S-2 HD", u: `https://embed.su/embed/${t}/${id}` },
-            { n: "S-3 MULTI", u: `https://vidsrc.me/embed/${t}?tmdb=${id}` }
+            { n: "Server 1", u: `https://vidsrc.to/embed/${t}/${id}` },
+            { n: "Server 2", u: `https://embed.su/embed/${t}/${id}` },
+            { n: "Server 3", u: `https://vidsrc.me/embed/${t}?tmdb=${id}` },
+            { n: "Server 4", u: `https://moviesapi.club/movie/${id}` },
+            { n: "Server 5", u: `https://vidlink.pro/${t}/${id}` },
+            { n: "Server 6", u: `https://vidsrc.cc/v2/embed/${t}/${id}` },
+            { n: "Server 7", u: `https://autoembed.to/${t}/tmdb/${id}` },
+            { n: "Server 8", u: `https://multiembed.mov/?video_id=${id}&tmdb=1` },
+            { n: "Server 9", u: `https://www.2embed.cc/embed/${id}` },
+            { n: "Server 10", u: `https://player.vidsrc.nl/embed/${t}/${id}` }
         ];
-        document.getElementById('serverList').innerHTML = servers.map(s => `<button onclick="document.getElementById('mainIframe').src='${s.u}'" class="bg-[#1a1d24] px-4 py-2 rounded text-[10px] font-bold uppercase min-w-max border border-white/5">${s.n}</button>`).join('');
-        document.getElementById('mainIframe').src = servers[0].u;
+        
+        document.getElementById('serverList').innerHTML = servers.map(s => `
+            <button onclick="changeServer('${s.u}')" class="bg-[#1a1d24] px-4 py-2 rounded text-[10px] font-bold uppercase min-w-max border border-white/5 active:bg-[#ff4f00]">${s.n}</button>
+        `).join('');
+        changeServer(servers[0].u);
+    }
+
+    function skipTime(seconds) {
+        alert("System Seek: " + seconds + "s triggered.");
+    }
+
+    function showDMCA() {
+        alert("DMCA NOTICE:\n\nPRI-MOVIES respects intellectual property. If your copyrighted material is indexed here and you want it removed, please email HELP.WOWMOVIES@GMAIL.COM with a valid copyright claim. We will disable access to the content within 24-48 hours.");
     }
 
     function filterBy(val, btn) {
@@ -196,9 +285,16 @@
         const data = await fetchData(`/search/multi?query=${q}`);
         data.results.forEach(m => {
             if(!m.poster_path) return;
+            const title = (m.title || m.name).replace(/'/g, "");
             const card = document.createElement('div');
             card.className = 'movie-card';
-            card.innerHTML = `<div class="rating-badge">${m.vote_average.toFixed(1)}</div><img src="https://image.tmdb.org/t/p/w500${m.poster_path}" onclick="playNow('${m.id}','${m.media_type}', '${(m.title || m.name).replace(/'/g, "")}')"><div class="card-info"><div class="movie-title">${m.title || m.name}</div></div>`;
+            card.innerHTML = `<div class="rating-badge">${m.vote_average.toFixed(1)}</div><img src="https://image.tmdb.org/t/p/w500${m.poster_path}" alt="${title}" onclick="playNow('${m.id}','${m.media_type}', '${title}')">
+            <div class="share-container">
+                        <button class="btn-share-3d btn-wa" onclick="shareMovie('wa','${m.id}','title')"><i class="fab fa-whatsapp"></i></button>
+                        <button class="btn-share-3d btn-tg" onclick="shareMovie('tg','${m.id}','title')"><i class="fab fa-telegram"></i></button>
+                        <button class="btn-share-3d btn-link" onclick="shareMovie('copy','${m.id}','title')"><i class="fa-solid fa-link"></i></button>
+                    </div>
+            <div class="card-info"><div class="movie-title">${title}</div></div>`;
             document.getElementById('popularGrid').appendChild(card);
         });
     }
