@@ -14,7 +14,8 @@
     <title>PRI-MOVIES - Watch Latest HD Movies & Web Series Free Online</title>
     <meta name="title" content="PRI-MOVIES - Watch Latest HD Movies & Web Series Free Online">
     <meta name="description" content="Watch the latest Hollywood, Bollywood, South Indian movies and Hindi web series in HD for free on PRI-MOVIES.">
-    <link rel="canonical" href="https://pri-movies.pages.dev/">
+    
+    <link rel="canonical" id="meta-canon" href="https://pri-movies.pages.dev/">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -133,7 +134,7 @@
         <button class="bg-[#4caf50] px-4 py-2 rounded text-[10px] font-bold" onclick="alert('Contact: HELP.WOWMOVIES@GMAIL.COM')">Contact</button>
         <button class="btn-footer-3d" onclick="showDMCA()">DMCA / Removal</button>
     </div>
-    <p class="text-[10px] text-gray-600 font-bold uppercase">© 2026 pri-movies.pages.dev</p>
+    <p class="text-[10px] text-gray-600 font-bold uppercase" id="footer-text">© 2026 pri-movies.pages.dev</p>
 </footer>
 
 <div class="bottom-nav">
@@ -164,9 +165,20 @@
 </div>
 
 <script>
+    // FIX 2: AUTO-DETECTION SYSTEM (Dynaically change site name)
+    const currentHost = window.location.hostname;
+    const siteTitle = currentHost.split('.')[0].toUpperCase();
+    document.title = siteTitle + " - Watch Latest HD Movies & Web Series Free Online";
+    document.querySelector('.logo').innerText = siteTitle;
+    document.getElementById('footer-text').innerText = "© 2026 " + currentHost;
+
     const API_KEY = '174d0214bf933dd59b3d5ec68a0c967f';
     const ADS_LINK = 'https://www.profitablecpmratenetwork.com/qvxvzh4wbb?key=251ed833a7e6bcaa6af4298a90f372aa';
     let currentPage = 1, currentType = 'movie', currentLang = '', isFetching = false;
+
+    // FIX 3: URL HANDLER FOR GOOGLE INDEXING
+    const urlParams = new URLSearchParams(window.location.search);
+    const movieParam = urlParams.get('m') || urlParams.get('id');
 
     function handleFirstClick() { window.open(ADS_LINK, '_blank'); document.getElementById('click-overlay').style.display = 'none'; }
 
@@ -176,6 +188,13 @@
     }
 
     async function init() {
+        // FIX 4: AUTO-SYNC REDIRECT TO SELECTED MOVIE
+        if(movieParam) {
+            const data = await fetchData(`/${currentType}/${movieParam}`);
+            if(data.id) playNow(data.id, currentType, data.title || data.name);
+            document.getElementById('meta-canon').href = window.location.href;
+        }
+
         const heroData = await fetchData('/trending/movie/day');
         document.getElementById('slider-content').innerHTML = heroData.results.slice(0, 5).map((m, i) => `
             <div class="poster-3d ${i === 0 ? 'poster-active' : ''}" onclick="playNow('${m.id}','movie', '${m.title.replace(/'/g, "")}')">
@@ -198,11 +217,11 @@
     }
 
     function shareMovie(platform, id, title) {
-        const url = encodeURIComponent(window.location.origin + '?id=' + id);
-        const text = encodeURIComponent("Watch " + title + " for Free on PRI-MOVIES!");
+        const url = encodeURIComponent(window.location.origin + '?m=' + id);
+        const text = encodeURIComponent("Watch " + title + " for Free on " + siteTitle + "!");
         if(platform === 'wa') window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`);
         if(platform === 'tg') window.open(`https://t.me/share/url?url=${url}&text=${text}`);
-        if(platform === 'copy') { navigator.clipboard.writeText(window.location.origin + '?id=' + id); alert('Movie Link Copied!'); }
+        if(platform === 'copy') { navigator.clipboard.writeText(window.location.origin + '?m=' + id); alert('Movie Link Copied!'); }
     }
 
     async function loadMore() {
@@ -243,6 +262,9 @@
         document.getElementById('playerOverlay').style.display = 'flex';
         document.getElementById('playingTitle').innerText = title;
         
+        // FIX 5: UPDATE URL WITHOUT RELOAD FOR GOOGLE BOT
+        window.history.pushState({}, '', '?m=' + id);
+
         const servers = [
             { n: "Server 1", u: `https://vidsrc.to/embed/${t}/${id}` },
             { n: "Server 2", u: `https://embed.su/embed/${t}/${id}` },
@@ -267,7 +289,7 @@
     }
 
     function showDMCA() {
-        alert("DMCA NOTICE:\n\nPRI-MOVIES respects intellectual property. If your copyrighted material is indexed here and you want it removed, please email HELP.WOWMOVIES@GMAIL.COM with a valid copyright claim. We will disable access to the content within 24-48 hours.");
+        alert("DMCA NOTICE:\n\n" + siteTitle + " respects intellectual property. If your copyrighted material is indexed here and you want it removed, please email HELP.WOWMOVIES@GMAIL.COM with a valid copyright claim. We will disable access to the content within 24-48 hours.");
     }
 
     function filterBy(val, btn) {
@@ -299,7 +321,7 @@
         });
     }
 
-    function closePlayer() { document.getElementById('playerOverlay').style.display = 'none'; document.getElementById('mainIframe').src = ''; }
+    function closePlayer() { document.getElementById('playerOverlay').style.display = 'none'; document.getElementById('mainIframe').src = ''; window.history.pushState({}, '', window.location.pathname); }
     
     window.onload = init;
 </script>
