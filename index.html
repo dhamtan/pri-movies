@@ -97,7 +97,7 @@
 <body>
 
 <div class="site-header">
-    <div class="logo" onclick="location.reload()">PRI-MOVIES</div>
+    <div class="logo" onclick="location.reload()">PRI-REVIEW</div>
     <div class="flex items-center gap-2">
         <input type="text" id="searchInput" onkeyup="if(event.keyCode===13)triggerSearch()" placeholder="Search..." class="bg-[#1a1d24] text-xs px-4 py-2 rounded-full border border-white/10 outline-none w-32 focus:w-44 transition-all text-white">
         <button onclick="triggerSearch()" class="bg-[#ff4f00] text-[10px] font-bold px-3 py-2 rounded-full uppercase">🔍</button>
@@ -165,18 +165,17 @@
 </div>
 
 <script>
-    // FIX 2: AUTO-DETECTION SYSTEM (Dynaically change site name)
+    // AUTO-DETECTION SYSTEM (Logo will stay PRI-REVIEW as fixed above)
     const currentHost = window.location.hostname;
     const siteTitle = currentHost.split('.')[0].toUpperCase();
     document.title = siteTitle + " - Watch Latest HD Movies & Web Series Free Online";
-    document.querySelector('.logo').innerText = siteTitle;
     document.getElementById('footer-text').innerText = "© 2026 " + currentHost;
 
     const API_KEY = '174d0214bf933dd59b3d5ec68a0c967f';
     const ADS_LINK = 'https://www.profitablecpmratenetwork.com/qvxvzh4wbb?key=251ed833a7e6bcaa6af4298a90f372aa';
     let currentPage = 1, currentType = 'movie', currentLang = '', isFetching = false;
 
-    // FIX 3: URL HANDLER FOR GOOGLE INDEXING
+    // URL HANDLER FOR GOOGLE INDEXING
     const urlParams = new URLSearchParams(window.location.search);
     const movieParam = urlParams.get('m') || urlParams.get('id');
 
@@ -188,7 +187,6 @@
     }
 
     async function init() {
-        // FIX 4: AUTO-SYNC REDIRECT TO SELECTED MOVIE
         if(movieParam) {
             const data = await fetchData(`/${currentType}/${movieParam}`);
             if(data.id) playNow(data.id, currentType, data.title || data.name);
@@ -261,8 +259,6 @@
         const t = (type === 'tv') ? 'tv' : 'movie';
         document.getElementById('playerOverlay').style.display = 'flex';
         document.getElementById('playingTitle').innerText = title;
-        
-        // FIX 5: UPDATE URL WITHOUT RELOAD FOR GOOGLE BOT
         window.history.pushState({}, '', '?m=' + id);
 
         const servers = [
